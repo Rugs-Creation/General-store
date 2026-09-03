@@ -168,8 +168,9 @@
   .hidden{ display:none !important; }
 
   /* ---------- Photo capture / thumbnails ---------- */
-  .thumb{ width:34px; height:34px; border-radius:8px; object-fit:cover; border:1px solid var(--line); background:#f1f5f9; display:block; }
-  .thumb-placeholder{ width:34px; height:34px; border-radius:8px; background:#f1f5f9; border:1px dashed #cbd5e1; display:block; }
+  .thumb{ width:34px; height:34px; border-radius:8px; object-fit:cover; border:1px solid var(--line); background:#f1f5f9; display:block; cursor:pointer; }
+  .thumb-placeholder{ width:34px; height:34px; border-radius:8px; background:#f1f5f9; border:1px dashed #cbd5e1; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#94a3b8; font-size:16px; line-height:1; font-weight:600; }
+  .thumb-placeholder:hover{ background:#e2e8f0; border-color:#94a3b8; color:#64748b; }
   .photo-row{ display:flex; align-items:center; }
   .photo-row > *:not(:first-child){ margin-left:12px; }
   .photo-preview{ width:76px; height:76px; border-radius:12px; overflow:hidden; background:#f1f5f9; border:1px solid var(--line);
@@ -28605,7 +28606,7 @@ ${m2}`;
     } else {
       html += '<div class="tablewrap"><table><thead><tr><th style="width:34px;"></th>' + th("items", "photo", "Photo") + th("items", "sr", "Sr") + th("items", "itemName", "Item Name") + th("items", "specification", "Specification") + th("items", "unit", "Unit") + th("items", "rate", "Rate") + th("items", "quantity", "Quantity") + th("items", "discount", "Discount") + th("items", "rateAfterDiscount", "Rate After Discount") + th("items", "supplierName", "Supplier") + "<th></th></tr></thead><tbody>";
       rows.forEach(function(r) {
-        html += "<tr><td>" + rowCheckbox("items", r.id) + "</td>" + td("items", "photo", r.photo ? '<img class="thumb" src="' + r.photo + '" onclick="viewPhoto(this.src)">' : '<span class="thumb-placeholder"></span>') + td("items", "sr", esc(r.srNo)) + td("items", "itemName", esc(r.itemName)) + td("items", "specification", esc(r.specification)) + td("items", "unit", esc(r.unit)) + td("items", "rate", r.rate !== void 0 && r.rate !== null && r.rate !== "" ? money(r.rate) : "\u2014", "num") + td("items", "quantity", r.quantity !== void 0 && r.quantity !== null && r.quantity !== "" ? fmt(r.quantity) : "\u2014", "num") + td("items", "discount", esc(r.discount || "\u2014"), "num") + td("items", "rateAfterDiscount", r.rateAfterDiscount !== void 0 && r.rateAfterDiscount !== null && r.rateAfterDiscount !== "" ? money(r.rateAfterDiscount) : "\u2014", "num") + td("items", "supplierName", esc(r.supplierName)) + '<td class="actions">' + iconBtn("edit", "openItemForm('" + r.id + "')") + iconBtn("del", "confirmDelete('items','" + r.id + "','" + escAttr(r.itemName) + "')") + "</td></tr>";
+        html += "<tr><td>" + rowCheckbox("items", r.id) + "</td>" + td("items", "photo", r.photo ? '<img class="thumb" src="' + r.photo + '" onclick="viewPhoto(this.src)">' : '<span class="thumb-placeholder" title="Add photo" onclick="quickAddPhoto(\'items\',\'' + r.id + '\')">+</span>') + td("items", "sr", esc(r.srNo)) + td("items", "itemName", esc(r.itemName)) + td("items", "specification", esc(r.specification)) + td("items", "unit", esc(r.unit)) + td("items", "rate", r.rate !== void 0 && r.rate !== null && r.rate !== "" ? money(r.rate) : "\u2014", "num") + td("items", "quantity", r.quantity !== void 0 && r.quantity !== null && r.quantity !== "" ? fmt(r.quantity) : "\u2014", "num") + td("items", "discount", esc(r.discount || "\u2014"), "num") + td("items", "rateAfterDiscount", r.rateAfterDiscount !== void 0 && r.rateAfterDiscount !== null && r.rateAfterDiscount !== "" ? money(r.rateAfterDiscount) : "\u2014", "num") + td("items", "supplierName", esc(r.supplierName)) + '<td class="actions">' + iconBtn("edit", "openItemForm('" + r.id + "')") + iconBtn("del", "confirmDelete('items','" + r.id + "','" + escAttr(r.itemName) + "')") + "</td></tr>";
       });
       html += "</tbody></table></div>";
     }
@@ -28670,7 +28671,7 @@ ${m2}`;
       html += '<div class="tablewrap"><table><thead><tr><th style="width:34px;"></th>' + th("ledger", "photo", "Photo") + th("ledger", "sr", "Sr") + th("ledger", "date", "Date") + th("ledger", "sparePart", "Spare Part") + th("ledger", "partyBill", "Party / Bill") + th("ledger", "uom", "Uom") + th("ledger", "opening", "Opening") + th("ledger", "received", "Received") + th("ledger", "total", "Total") + th("ledger", "issued", "Issued") + th("ledger", "balance", "Balance") + th("ledger", "department", "Department") + th("ledger", "rack", "Rack") + "<th></th></tr></thead><tbody>";
       rows.forEach(function(r) {
         var balCls = num(r.balanceStock) <= 0 ? "low" : num(r.balanceStock) <= state.settings.lowStock ? "mid" : "ok";
-        html += "<tr><td>" + rowCheckbox("ledger", r.id) + "</td>" + td("ledger", "photo", r.photo ? '<img class="thumb" src="' + r.photo + '" onclick="viewPhoto(this.src)">' : '<span class="thumb-placeholder"></span>') + td("ledger", "sr", esc(r.srNo)) + td("ledger", "date", esc(fmtDate(r.date))) + td("ledger", "sparePart", esc(r.sparePartName)) + td("ledger", "partyBill", esc(r.partyName) + (r.billNo ? ' <span class="rowtxt-sub">#' + esc(r.billNo) + "</span>" : "")) + td("ledger", "uom", esc(r.uom)) + td("ledger", "opening", fmt(r.openingStock), "num") + td("ledger", "received", fmt(r.receivedQty), "num") + td("ledger", "total", fmt(r.totalStock), "num") + td("ledger", "issued", fmt(r.issueQty), "num") + td("ledger", "balance", '<span class="tag ' + balCls + '">' + fmt(r.balanceStock) + "</span>", "num") + td("ledger", "department", esc(r.departmentName)) + td("ledger", "rack", esc(r.rackLocation)) + '<td class="actions">' + iconBtn("edit", "openLedgerForm('" + r.id + "')") + iconBtn("del", "confirmDelete('ledger','" + r.id + "','" + escAttr(r.sparePartName) + "')") + "</td></tr>";
+        html += "<tr><td>" + rowCheckbox("ledger", r.id) + "</td>" + td("ledger", "photo", r.photo ? '<img class="thumb" src="' + r.photo + '" onclick="viewPhoto(this.src)">' : '<span class="thumb-placeholder" title="Add photo" onclick="quickAddPhoto(\'ledger\',\'' + r.id + '\')">+</span>') + td("ledger", "sr", esc(r.srNo)) + td("ledger", "date", esc(fmtDate(r.date))) + td("ledger", "sparePart", esc(r.sparePartName)) + td("ledger", "partyBill", esc(r.partyName) + (r.billNo ? ' <span class="rowtxt-sub">#' + esc(r.billNo) + "</span>" : "")) + td("ledger", "uom", esc(r.uom)) + td("ledger", "opening", fmt(r.openingStock), "num") + td("ledger", "received", fmt(r.receivedQty), "num") + td("ledger", "total", fmt(r.totalStock), "num") + td("ledger", "issued", fmt(r.issueQty), "num") + td("ledger", "balance", '<span class="tag ' + balCls + '">' + fmt(r.balanceStock) + "</span>", "num") + td("ledger", "department", esc(r.departmentName)) + td("ledger", "rack", esc(r.rackLocation)) + '<td class="actions">' + iconBtn("edit", "openLedgerForm('" + r.id + "')") + iconBtn("del", "confirmDelete('ledger','" + r.id + "','" + escAttr(r.sparePartName) + "')") + "</td></tr>";
       });
       html += "</tbody></table></div>";
     }
@@ -29063,6 +29064,44 @@ ${m2}`;
   function viewPhoto(src) {
     if (!src) return;
     openModal('<div style="text-align:center;"><img src="' + src + '" style="max-width:100%; border-radius:12px;"><div class="modal-actions"><button class="btn primary" onclick="closeModal()">Close</button></div></div>');
+  }
+  var quickPhotoTarget = null;
+  function quickAddPhoto(bucket, id) {
+    var arr = bucket === "items" ? state.items : state.ledger;
+    var r = arr.find(function(x) {
+      return x.id === id;
+    });
+    if (!r) return;
+    quickPhotoTarget = { bucket: bucket, id: id };
+    var label = bucket === "items" ? r.itemName : r.sparePartName;
+    var body = "<h3>Add photo</h3><div class=\"hint\">Attach a photo for \"" + esc(label || "this entry") + "\".</div><div class=\"field\"><div class=\"photo-row\"><div class=\"photo-preview\"><div class=\"photo-placeholder\">No photo</div></div><div class=\"photo-btns\"><button type=\"button\" class=\"btn sm\" onclick=\"document.getElementById('quickPhotoCameraInput').click()\">&#128247; Take Photo</button><button type=\"button\" class=\"btn sm\" onclick=\"document.getElementById('quickPhotoLibraryInput').click()\">&#128193; Upload Photo</button></div></div></div><input type=\"file\" accept=\"image/*\" capture=\"environment\" id=\"quickPhotoCameraInput\" class=\"hidden\" onchange=\"handleQuickPhotoInput(this)\"><input type=\"file\" accept=\"image/*\" id=\"quickPhotoLibraryInput\" class=\"hidden\" onchange=\"handleQuickPhotoInput(this)\"><div class=\"modal-actions\"><button class=\"btn\" onclick=\"closeModal()\">Cancel</button></div>";
+    openModal(body);
+  }
+  function handleQuickPhotoInput(input) {
+    var file = input.files && input.files[0];
+    input.value = "";
+    if (!file || !quickPhotoTarget) return;
+    var target = quickPhotoTarget;
+    toast("Uploading photo…");
+    compressImage(file, async function(dataUrl) {
+      var url = await uploadPhotoDataUrl(dataUrl);
+      if (!url) return;
+      var table = target.bucket === "items" ? "csps_items" : "csps_ledger";
+      var res = await sb.from(table).update({ photo_url: url }).eq("id", target.id).select().single();
+      if (res.error) {
+        toast("Could not save photo: " + res.error.message);
+        return;
+      }
+      var arr = target.bucket === "items" ? state.items : state.ledger;
+      var idx = arr.findIndex(function(x) {
+        return x.id === target.id;
+      });
+      if (idx > -1) arr[idx] = rowToApp(target.bucket, res.data);
+      quickPhotoTarget = null;
+      closeModal();
+      renderOnly();
+      toast("Photo added");
+    });
   }
   function datalist(id, values) {
     var uniq = Array.from(new Set((values || []).filter(Boolean)));
@@ -29680,6 +29719,8 @@ ${m2}`;
   window.setPhotoValue = setPhotoValue;
   window.handlePhotoInput = handlePhotoInput;
   window.viewPhoto = viewPhoto;
+  window.quickAddPhoto = quickAddPhoto;
+  window.handleQuickPhotoInput = handleQuickPhotoInput;
   window.exportExcel = exportExcel;
   window.exportAllExcel = exportAllExcel;
   window.confirmSheetImport = confirmSheetImport;
